@@ -1,15 +1,7 @@
 import express from 'express'
-import mysql from 'mysql2/promise'
+import { connection } from './db.js'
 
 export const studentRouter = express.Router()
-
-const connection = await mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "1234",
-    database: "school_db",
-    port: 3306
-})
 
 studentRouter.post("/", async (req, res) => {
     const {name, age, class_name} = req.body
@@ -20,18 +12,6 @@ studentRouter.post("/", async (req, res) => {
         res.status(400).json({db: "error", message: "missing fields"})
     }
 })
-
-// studentRouter.get("/", async (req, res) => {
-//     const students = await connection.query("SELECT * FROM students")   
-//     let count = 0
-//     for (const student of students) {
-//         count += 1
-//     }
-//     res.status(200).json({
-//         count: count,
-//         students: students[0]
-//     })
-// })
 
 studentRouter.get("/:id", async (req, res) => {
     const {id} =  req.params
